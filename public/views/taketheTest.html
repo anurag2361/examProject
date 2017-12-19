@@ -1,0 +1,65 @@
+<!-- W3 schools styles-->
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<div ng-controller="testController as test">
+    <nav class="navbar fixed-top navbar-toggleable-md navbar-inverse bg-inverse">
+        <br/>
+        <div class="container">
+            <a class="navbar-brand" href="">
+                <h2>Exam App Dashboard</h2>
+            </a>
+            <ul align="right" class="nav navbar-nav pull-right">
+                <!-- Button for back to dashboard -->
+                <button align="right" type="button" style="margin:7px" class="btn btn-logged btn-success" aria-haspopup="true" aria-expanded="false">
+                    <a style="color:white;" href="#/dashboard/{{test.userId}}">Back&nbsp;</a>
+                </button>
+                <!-- End of back to dashboard -->
+            </ul>
+        </div>
+        <br/>
+    </nav>
+
+
+    <section>
+        <h1 align="center" style="color:white;">{{test.heading}}</h1>
+        <h4 align="center" style="color: white;">: Tests Available :</h4>
+        <br>
+
+        <div class="row container-fluid">
+            &nbsp;
+            <div ng-init="test.getTests()" class="modal-body">
+                <div class="col-sm-4 w3-card-2" ng-repeat="test1 in test.testArray track by $index" style="width:33%;">
+                    <header class="w3-container w3-blue">
+                        <h1 align="center">{{test1.testName}}</h1>
+                    </header>
+                    <div class="w3-container w3-white">
+                        <p align="center">
+                            <img align="center" src="img/testimg.png" class="img-fluid" alt="Responsive image" />
+                        </p>
+                    </div>
+                    <footer class="w3-container w3-blue">
+                        <h5 align="center">
+                            <span align="center">
+                                <button class="btn btn-primary idoftest" data-id={{test1._id}} data-user={{test.userId}}>
+                                    <a style="color:white;" id="link">Take Test!</a>
+                                </button>
+                            </span>
+                        </h5>
+                    </footer>
+                    <br/>
+                </div>
+            </div>
+        </div>
+        <br/>
+
+        
+
+
+        <script>
+            $(document).on("click", ".idoftest", function () {
+                var Id = $(this).data('id');
+                // console.log(Id);
+                var idOfUser = $(this).data('user');
+                //console.log(idOfUser);
+                location.replace('#/liveTest/' + idOfUser + '/' + Id)
+            });
+        </script>

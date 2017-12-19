@@ -1,0 +1,37 @@
+{
+  "name": "exam-project",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node app"
+  },
+  "description": "examProject",
+  "author": {
+    "name": "ANURAG"
+  },
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.15.0",
+    "connect-flash": "^0.1.1",
+    "connect-redis": "^3.3.2",
+    "cookie-parser": "^1.4.0",
+    "cors": "^2.8.4",
+    "debug": "^2.2.0",
+    "express": "^4.14.0",
+    "express-jwt": "^5.3.0",
+    "express-session": "^1.15.6",
+    "http": "0.0.0",
+    "jsonwebtoken": "^7.3.0",
+    "method-override": "^2.3.10",
+    "mongoose": "^4.13.2",
+    "morgan": "^1.7.0",
+    "passport": "^0.4.0",
+    "passport-facebook": "^2.1.1",
+    "passport-google": "^0.3.0",
+    "passport-google-oauth": "^1.0.0",
+    "passport-google-oauth2": "^0.1.6",
+    "pug": "^2.0.0-beta6",
+    "serve-favicon": "^2.3.0",
+    "util": "^0.10.3"
+  }
+}

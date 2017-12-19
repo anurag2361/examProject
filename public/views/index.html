@@ -1,0 +1,64 @@
+<div ng-controller="indexController as index">
+    <div class="brand">Exam App</div>
+    <div class="address-bar">Live Test</div>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <!-- navbar-brand is hidden on larger screens, but visible when the menu is collapsed -->
+                <a class="navbar-brand" href="index.html">Exam App</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="#/">Home</a>
+                    </li>
+                    <li ng-if="index.logged() === 0">
+                        <a href="#/loginsignup">login/Signup</a>
+                    </li>
+                    <li ng-if="index.logged() === 1 && index.username === 'Admin'">
+                        <a href="#/admin/{{index.userID}}">Dashboard</a>
+                    </li>
+                    <li ng-if="index.logged() === 1 && index.username !== 'Admin'">
+                        <a href="#/dashboard/{{index.userID}}">Dashboard</a>
+                    </li>
+                    
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <div class="container">
+
+        <div class="row">
+            <div class="box">
+                <div class="col-lg-12">
+                    <hr>
+                    <img class="img-responsive img-border img-left" src="img/intro-pic.jpg" alt="">
+                    <hr class="visible-xs">
+                    <p>
+                        <br/> This is the last online exam system you will ever need! With our online Exam Portal you will Easily
+                        able to test your skills and imporove them. We provide detailed analysis of your exam and compare
+                        those results with the topper so that you can get clear idea about your skill level in that topic.
+                        Feature rich UI makes your exam giving more convenient and Easy.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- /.container -->
+
+    
+
+</div>
