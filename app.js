@@ -1,4 +1,5 @@
-﻿var express = require('express');
+﻿//importing required modules
+var express = require('express');
 var app = express();
 var path = require('path');
 var mongoose = require('mongoose');
@@ -13,6 +14,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+var err, response; //required variables
 
 
 app.use(cors({
@@ -52,10 +54,10 @@ var googleAuthentication = require('./models/googleAuthentication');
 app.get('/getuserinfofacebook', function (req, res) {
     userAuthentication.find(function (error, user) {
         if (error) {
-            var err = responseGenerator.generate(true, "Something is wrong. Error: " + error, 500, null);
+            err = responseGenerator.generate(true, "Something is wrong. Error: " + error, 500, null);
             res.json(err);
         } else {
-            var response = responseGenerator.generate(false, "User info access was successful", 200, user);
+            response = responseGenerator.generate(false, "User info access was successful", 200, user);
             res.json(user);
         }
     });
@@ -65,10 +67,10 @@ app.get('/getuserinfofacebook', function (req, res) {
 app.get('/getuserinfogoogle', function (req, res) {
     googleAuthentication.find(function (error, user) {
         if (error) {
-            var err = responseGenerator.generate(true, "Something is wrong. Error: " + error, 500, null);
+            err = responseGenerator.generate(true, "Something is wrong. Error: " + error, 500, null);
             res.json(err);
         } else {
-            var response = responseGenerator.generate(false, "User info fetched successfully", 200, user);
+            response = responseGenerator.generate(false, "User info fetched successfully", 200, user);
             res.json(user);
         }
     });
