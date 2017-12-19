@@ -22,7 +22,7 @@ examApp.controller('dashController', ['$filter', '$http', '$location', '$routePa
     this.getsecurityQuestion();
     this.logged = function () {
         main.username = queryService.userName;
-        if (queryService.log == 1 || queryService.userId !== 'undefined') {
+        if (queryService.log === 1 || queryService.userId !== 'undefined') {
             return 1;
         } else {
             $location.path('/');

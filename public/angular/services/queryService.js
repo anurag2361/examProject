@@ -13,7 +13,7 @@ examApp.factory('queryService', function queryFactory($http, authenticationServi
     }
 
     queryArray.facebookLogin = function () {
-        return $http.get('/auth/facebook');
+        return $http.get('/authentication/facebook');
     }
 
     queryArray.googleLogin = function () {

@@ -1,3 +1,4 @@
+var passport = require('passport');
 var facebookStrategy = require('passport-facebook').Strategy;
 var userAuthentication = require('../models/userAuthentication');
 var configAuthentication = require('./authentication');
