@@ -5,14 +5,14 @@ var path = require('path');
 var mongoose = require('mongoose');
 var favicon = require('serve-favicon');
 var session = require('express-session');
-var methodOverride = require('method-override');
+var methodOverride = require('method-override');//use http terms like PUT and DELETE
 var fs = require('fs');
 var cors = require('cors');
 var passport = require('passport');
 var flash = require('connect-flash');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
+var bodyParser = require('body-parser');//used to parse incoming request by req.body
 
 var err, response; //required variables
 
@@ -30,28 +30,28 @@ app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cookieParser());
 app.use(express.static(path.resolve(__dirname, './public')));
 
-require('./configuration/passport')(passport);
+require('./configuration/passport')(passport);//passport module loaded from another file.
 
-app.use(passport.initialize());
-app.use(passport.session());
-app.use(flash());
+app.use(passport.initialize());//initializing passport service
+app.use(passport.session());//for persistent login sessions
+app.use(flash());//used to store flash messages in session
 
 var responseGenerator = require('./libraries/responseGenerator');
 var userModel = require('./models/User');
 
 var Routes = require('./controllers/routes');
-app.use('/users', Routes);
+app.use('/users', Routes);//use routes controller on users route
 
 var examRoutes = require('./controllers/examRoutes');
-app.use('/tests', examRoutes);
+app.use('/tests', examRoutes);//use exam controllers on tests route
 
 require('./controllers/fbRoute')(app, passport);
 require('./controllers/googleRoute')(app, passport);
 
-var userAuthentication = require('./models/userAuthentication');
+var userAuthentication = require('./models/userAuthentication');//invoking mongoose models
 var googleAuthentication = require('./models/googleAuthentication');
 
-app.get('/getuserinfofacebook', function (req, res) {
+app.get('/getuserinfofacebook', function (req, res) { //facebook route
     userAuthentication.find(function (error, user) {
         if (error) {
             err = responseGenerator.generate(true, "Something is wrong. Error: " + error, 500, null);
@@ -64,7 +64,7 @@ app.get('/getuserinfofacebook', function (req, res) {
 });
 
 
-app.get('/getuserinfogoogle', function (req, res) {
+app.get('/getuserinfogoogle', function (req, res) { //google user info route
     googleAuthentication.find(function (error, user) {
         if (error) {
             err = responseGenerator.generate(true, "Something is wrong. Error: " + error, 500, null);

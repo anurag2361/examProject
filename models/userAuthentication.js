@@ -1,3 +1,4 @@
+//used for facebook
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var userauthenticationSchema = new Schema({

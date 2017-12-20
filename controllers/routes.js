@@ -1,5 +1,5 @@
 var express = require('express');
-var app = express.Router();
+var app = express.Router(); //for routing purposes
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
 var responseGenerator = require('../libraries/responseGenerator');
@@ -13,7 +13,7 @@ var decodedToken;
 var err, response;
 
 var authentication = function (req, res, next) {
-    var token = req.body.token || req.query.token || req.headers['x-access-token'];
+    token = req.body.token || req.query.token || req.headers['x-access-token'];
     if (token) {
         jwt.verify(token, "98ix0b84gs3r@&$#*np9bgkpfjeib1f9ipe", function (err, decoded) {
             if (err) {
@@ -28,7 +28,7 @@ var authentication = function (req, res, next) {
     }
 }
 
-app.post('/login', validation.login, function (req, res) {
+app.post('/login', validation.login, function (req, res) { //login and signup pass through validation middleware
     User.findOne({ email: req.body.email }, function (error, user) {
         if (error) {
             err = responseGenerator.generate(true, "Something is wrong: " + error, 500, null);
@@ -39,7 +39,7 @@ app.post('/login', validation.login, function (req, res) {
         } else if (!user.compareHash(req.body.password)) {
             response = responseGenerator.generate(true, "Wrong password. Enter correct password", 401, null);
             res.json(response);
-        } else {
+        } else {  //sign token if all ok
             token = jwt.sign({
                 exp: Math.floor(Date.now() / 1000) + (60 * 60 * 60),
                 id: user._id,
@@ -63,7 +63,7 @@ app.post('/signup', validation.signup, function (req, res) {
         } else if (user) {
             err = responseGenerator.generate(true, "Email exists", 400, null);
             res.json(err);
-        } else {
+        } else { //create new user
             var newUser = new User({
                 name: req.body.name,
                 email: req.body.email,
@@ -72,7 +72,7 @@ app.post('/signup', validation.signup, function (req, res) {
                 answer: req.body.answer
             });
 
-            newUser.password = newUser.generateHash(req.body.password);
+            newUser.password = newUser.generateHash(req.body.password); //create a hash of user password
             newUser.save(function (error) {
                 if (error) {
                     response = responseGenerator.generate(true, "Something was wrong. Error: " + error, 500, null);
@@ -95,9 +95,9 @@ app.post('/signup', validation.signup, function (req, res) {
     });
 });
 
-app.post('/reset', validation.reset, function (req, res) {
-    console.log("Reset activated");
-    User.findOne({ email: req.body.email }, function (error, user) {
+app.post('/reset', validation.reset, function (req, res) { //password reset
+    //console.log("Reset activated");
+    User.findOne({ email: req.body.email }, function (error, user) { //reads email
         console.log("User: " + user);
         if (error) {
             err = responseGenerator.generate(true, "Something is wrong. Error: " + error, 500, null);
@@ -121,8 +121,8 @@ app.post('/reset', validation.reset, function (req, res) {
     });
 });
 
-app.post('/SecurityQuestion', function (req, res) {
-    console.log("Security question activated");
+app.post('/SecurityQuestion', function (req, res) { //ask security question
+    //console.log("Security question activated");
     User.findOne({ _id: req.body._id }, function (error, user) {
         console.log("User= " + user);
         if (error) {
@@ -147,8 +147,8 @@ app.post('/SecurityQuestion', function (req, res) {
     });
 });
 
-app.post('/ResetPassword', function (req, res) {
-    console.log("Reset password realm");
+app.post('/ResetPassword', function (req, res) { //password reset completes here
+    //console.log("Reset password realm");
     User.findOne({ $and: [{ 'answer': req.body.answer }, { '_id': req.body._id }] }, function (error, user) {
         console.log("User: " + user);
         if (error) {
@@ -184,7 +184,7 @@ app.post('/ResetPassword', function (req, res) {
     });
 });
 
-app.get('/getuserinfo', authentication, function (req, res) {
+app.get('/getuserinfo', authentication, function (req, res) { //retrieve user info
     User.find(function (error, user) {
         if (error) {
             err = responseGenerator.generate(true, "Something is wrong. Error: " + error, 500, null);

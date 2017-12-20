@@ -6,7 +6,6 @@ var util = require('util');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
-var redisStore = require('connect-redis')(session);
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
 app.use(require('morgan')('combined'));
@@ -15,13 +14,14 @@ var googleAuthentication = require('../models/googleAuthentication');
 var GOOGLE_CLIENT_ID = " 518408673074-62ie395n257id8auss1gq1gneii3lcab.apps.googleusercontent.com ";
 var GOOGLE_CLIENT_SECRET = " rY_kyNrvJE1QKTKBU0ZK_Fbu ";
 var responseGenerator = require('../libraries/responseGenerator');
+var token, authentication;
+var jwt = require('jsonwebtoken');
+var jwtSecret = "98ix0b84gs3r@&$#*np9bgkpfjeib1f9ipe";
+var decodedToken;
 
 module.exports = function (app, passport) {
-    var token;
-    var jwt = require('jsonwebtoken');
-    var jwtSecret = "98ix0b84gs3r@&$#*np9bgkpfjeib1f9ipe";
-    var decodedToken;
-    var authentication = function (req, res, next) {
+
+    authentication = function (req, res, next) {
         var token = req.body.token || req.query.token || req.headers['x-access-token'];
         if (token) {
             jwt.verify(token, "98ix0b84gs3r@&$#*np9bgkpfjeib1f9ipe", function (err, decoded) {
@@ -49,8 +49,8 @@ module.exports = function (app, passport) {
     passport.use(new GoogleStrategy({
         clientID: GOOGLE_CLIENT_ID,
         clientSecret: GOOGLE_CLIENT_SECRET,
-        callbackUrl: "http://localhost:3000/auth/google/callback",
-        realm: 'http://localhost:3000',
+        callbackUrl: "http://ec2-13-127-92-66.ap-south-1.compute.amazonaws.com/auth/google/callback",
+        realm: 'http://ec2-13-127-92-66.ap-south-1.compute.amazonaws.com/#/',
         passReqToCallback: true
     },
         function (request, accessToken, refreshToken, profile, done) {

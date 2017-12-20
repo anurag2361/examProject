@@ -1,19 +1,19 @@
 var mongoose = require('mongoose');
 var express = require('express');
-var examRouter = express.Router();
+var examRouter = express.Router(); //for routing purposes
 var Test = require('../models/test');
 var Question = require('../models/question');
 var Answer = require('../models/answer');
 var Performance = require('../models/performance');
 var responseGenerator = require('./../libraries/responseGenerator');
 
-var error, response;
+var error, response; //requires variables
 
 var token;
 var jwt = require('jsonwebtoken');
 var decodedToken;
 var authentication = function (req, res, next) {
-    var token = req.body.token || req.query.token || req.headers['x-access-token'];
+    token = req.body.token || req.query.token || req.headers['x-access-token'];
     if (token) {
         jwt.verify(token, "98ix0b84gs3r@&$#*np9bgkpfjeib1f9ipe", function (err, decoded) {
             if (err) {
@@ -30,7 +30,7 @@ var authentication = function (req, res, next) {
 
 
 examRouter.post('/createTest/admin', authentication, function (req, res) {
-    var test = new Test(req.body);
+    var test = new Test(req.body); //reads body parameters
     console.log(test);
     test.save(function (err, test) {
         if (err) {
@@ -44,9 +44,9 @@ examRouter.post('/createTest/admin', authentication, function (req, res) {
 });
 
 
-examRouter.get('/allTests', authentication, function (req, res) {
+examRouter.get('/allTests', authentication, function (req, res) { //retrieve all tests
     Test.find(function (err, tests) {
-        console.log(tests);
+        //console.log(tests);
         if (err) {
             error = responseGenerator.generate(true, "There was a problem. " + err, 500, null);
             res.send(error);
@@ -60,10 +60,10 @@ examRouter.get('/allTests', authentication, function (req, res) {
     });
 });
 
-examRouter.get('/test/:test_id', authentication, function (req, res) {
+examRouter.get('/test/:test_id', authentication, function (req, res) { //open a specific test
     Test.findById({ _id: req.params.test_id }, function (err, test) {
-        console.log('test id is: ' + req.params.test_id);
-        console.log(test);
+        //console.log('test id is: ' + req.params.test_id);
+        //console.log(test);
         if (err) {
             error = responseGenerator.generate(true, "There was a problem. Error: " + err, 500, null);
             res.send(error);
@@ -77,7 +77,7 @@ examRouter.get('/test/:test_id', authentication, function (req, res) {
     });
 });
 
-examRouter.put('/test/update/:test_id', authentication, function (req, res) {
+examRouter.put('/test/update/:test_id', authentication, function (req, res) {  //update a desired test
     Test.findByIdAndUpdate({ _id: req.params.test_id }, req.body, function (err, test) {
         if (err) {
             error = responseGenerator.generate(true, "There was a problem. Error: " + err, 500, null);
@@ -89,7 +89,7 @@ examRouter.put('/test/update/:test_id', authentication, function (req, res) {
     });
 });
 
-examRouter.delete('/test/delete/:test_id', authentication, function (req, res) {
+examRouter.delete('/test/delete/:test_id', authentication, function (req, res) { //delete a test
     Test.findByIdAndRemove(req.params.test_id, function (err, test) {
         if (err) {
             error = responseGenerator.generate(true, "There was a problem. Error: " + err, 500, null);
@@ -105,20 +105,20 @@ examRouter.delete('/test/delete/:test_id', authentication, function (req, res) {
 });
 
 
-examRouter.post('/:test_id/createQuestion', authentication, function (req, res) {
-    var question = new Question(req.body);
-    console.log("Question: " + question);
+examRouter.post('/:test_id/createQuestion', authentication, function (req, res) { //create questions for a test
+    var question = new Question(req.body); //read body parameters
+    //console.log("Question: " + question);
     Test.findById({ _id: req.params.test_id }, function (err, test) {
-        if (err) {
+        if (err) { 
             error = responseGenerator.generate(true, "There was a problem. Dont forget to remove '/' from Test ID Error: " + err, 500, null);
             res.send(error);
         } else {
-            if (test.questions.length == 10) {
+            if (test.questions.length == 10) { //if more than 10 questions
                 error = responseGenerator.generate(true, "You can add only 10 questions. Remove slash and try again. Error: " + err, 500, null);
                 res.send(error);
             } else {
                 question.save();
-                test.questions.push(question)
+                test.questions.push(question) //push to question
                 test.save(function (err, test) {
                     if (err) {
                         error = responseGenerator.generate(true, "There was a problem. Error: " + err, 500, null);
@@ -137,7 +137,7 @@ examRouter.post('/:test_id/createQuestion', authentication, function (req, res) 
 });
 
 
-examRouter.get('/:test_id/getQuestions', authentication, function (req, res) {
+examRouter.get('/:test_id/getQuestions', authentication, function (req, res) { //get questions for a test
     Test.findById({ _id: req.params.test_id }, function (err, test) {
         if (err) {
             error = responseGenerator.generate(true, "There was a problem. Error: " + err, 500, null);
@@ -153,7 +153,7 @@ examRouter.get('/:test_id/getQuestions', authentication, function (req, res) {
 });
 
 
-examRouter.get('/question/:test_id/:index/:question_id/delete', authentication, function (req, res) {
+examRouter.get('/question/:test_id/:index/:question_id/delete', authentication, function (req, res) { //delete a specific question
     Test.findOne({ _id: req.params.test_id }, function (err, test) {
         if (err) {
             error = responseGenerator.generate(true, "Remove slash(/) from test id. Error: " + err, 500, null);
@@ -164,8 +164,8 @@ examRouter.get('/question/:test_id/:index/:question_id/delete', authentication, 
                 res.send(error);
             } else {
                 Question.findByIdAndRemove(req.params.question_id);
-                test.questions.splice(req.params.index, 1);
-                console.log("Questions: " + test.questions);
+                test.questions.splice(req.params.index, 1); //removes from questions array
+                //console.log("Questions: " + test.questions);
                 test.save(function (err, question) {
                     if (err) {
                         error = responseGenerator.generate(true, "There was a problem. Error: " + err, 500, null);
@@ -181,15 +181,15 @@ examRouter.get('/question/:test_id/:index/:question_id/delete', authentication, 
 });
 
 
-examRouter.post('/question/:test_id/:index/:question_id/update', authentication, function (req, res) {
+examRouter.post('/question/:test_id/:index/:question_id/update', authentication, function (req, res) {  //update a specific question
     Question.findByIdAndUpdate(req.params.question_id, req.body, function (err, question) {
         if (err) {
             error = responseGenerator.generate(true, "There was a problem. Error: " + err, 500, null);
             res.send(error);
         } else {
-            console.log("Test updated");
+            //console.log("Test updated");
             Test.findById(req.params.test_id, function (err, test) {
-                test.questions.splice(req.params.index, 1);
+                test.questions.splice(req.params.index, 1); //removes previous question and replace it with a new one
                 var quest = new Question(req.body);
                 test.questions.push(quest);
                 test.save(function (err, result) {
@@ -207,16 +207,16 @@ examRouter.post('/question/:test_id/:index/:question_id/update', authentication,
 });
 
 
-examRouter.post('/tests/:test_id/questions/:question_id/answer', authentication, function (req, res) {
-    var answerScore;
-    var timetakenInsecs;
+examRouter.post('/tests/:test_id/questions/:question_id/answer', authentication, function (req, res) {  //provide answer to question
+    var answerScore; //calculating score
+    var timetakenInsecs;//time taken to answer
     Question.findById(req.params.question_id, function (err, question) {
         if (err) {
             error = responseGenerator.generate(true, "There was a problem. Error: " + err, 500, null);
             res.send(error);
         } else {
             console.log("Question: " + question);
-            console.log(req.body);
+            //console.log(req.body);
             var answer = new Answer(req.body);
             answer.user = decodedToken.id;
             answer.question = req.params.question_id;
@@ -237,8 +237,8 @@ examRouter.post('/tests/:test_id/questions/:question_id/answer', authentication,
 });
 
 
-examRouter.get('/tests/:test_id/answer', authentication, function (req, res) {
-    Answer.find({ "$and": [{ "user": req.decodedToken.id }, { "test": req.params.test_id }] }, function (err, answer) {
+examRouter.get('/tests/:test_id/answer', authentication, function (req, res) { //retrieve answers for a specific question
+    Answer.find({ "$and": [{ "user": req.decodedToken.id }, { "test": req.params.test_id }] }, function (err, answer) { //$and reads multiple things
         if (err) {
             error = responseGenerator.generate(true, "There was a problem. Error: " + err, 500, null);
             res.send(error);
@@ -250,9 +250,9 @@ examRouter.get('/tests/:test_id/answer', authentication, function (req, res) {
 });
 
 
-examRouter.get('/tests/:user_id/answers', authentication, function (req, res) {
+examRouter.get('/tests/:user_id/answers', authentication, function (req, res) { //retrieve answers by a specific user for a specific test
     Answer.find(req.params.user_id, function (err, answers) {
-        console.log(tests);
+        //console.log(tests);
         if (err) {
             error = responseGenerator.generate(true, "There was a problem. Error: " + err, 500, null);
             res.send(error);
@@ -267,7 +267,7 @@ examRouter.get('/tests/:user_id/answers', authentication, function (req, res) {
 });
 
 
-examRouter.post('/performance/:test_id', authentication, function (req, res) {
+examRouter.post('/performance/:test_id', authentication, function (req, res) { //store performance
     var performanceScored = new Performance(req.body);
     performanceScored.user = decodedToken.id;
     performanceScored.test = req.params.test_id;
@@ -283,7 +283,7 @@ examRouter.post('/performance/:test_id', authentication, function (req, res) {
 });
 
 
-examRouter.get('/performance/:test_id', authentication, function (req, res) {
+examRouter.get('/performance/:test_id', authentication, function (req, res) { //performnace for a specific test
     Performance.find(req.params.test_id, function (err, Performance) {
         if (err) {
             error = responseGenerator.generate(true, "There was a problem. Error: " + err, 500, null);
@@ -299,7 +299,7 @@ examRouter.get('/performance/:test_id', authentication, function (req, res) {
 });
 
 
-examRouter.get('/performance/user/:user_id', authentication, function (req, res) {
+examRouter.get('/performance/user/:user_id', authentication, function (req, res) { //performance of a specific user in a specific test
     Performance.find({ user: req.params.user_id }, function (err, Performance) {
         if (err) {
             error = responseGenerator.generate(true, "There was a problem. Error: " + err, 500, null);
@@ -315,7 +315,7 @@ examRouter.get('/performance/user/:user_id', authentication, function (req, res)
 });
 
 
-examRouter.put('/tests/:testId/givenBy', authentication, function (req, res) {
+examRouter.put('/tests/:testId/givenBy', authentication, function (req, res) { //retrieve the info of the person who gave the test
     Test.findByIdAndUpdate({
         _id: req.params.testId
     },
