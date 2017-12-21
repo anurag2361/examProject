@@ -11,11 +11,11 @@ examApp.controller('testController', ['$filter', '$http', '$location', '$routePa
                     alert(response.data.message);
                 } else {
 
-                    var userId;
+                    var userId; //when user passes checks, retrieve his id
                     var data = response.data.data;
-                    main.user = data.name;
-                    main.userId = data._id;
-                    authenticationService.setToken(response.data.token);
+                    main.user = data.name; //retrieve name
+                    main.userId = data._id; //retrieve id
+                    authenticationService.setToken(response.data.token);//set recieved token to local storage
                 }
             }, function errorCallBack(response) {
                 //console.log(response);
@@ -26,9 +26,9 @@ examApp.controller('testController', ['$filter', '$http', '$location', '$routePa
 
     this.getsecurityQuestion();
 
-    this.logged = function () {
-        main.username = queryService.userName;
-        if (queryService.log === 1 || queryService.userId !== 'undefined') {
+    this.logged = function () { //check if logged in
+        main.username = queryService.userName; //retrieve username
+        if (queryService.log === 1 || queryService.userId !== 'undefined') { //strict checking
             return 1;
         } else {
 
@@ -48,10 +48,10 @@ examApp.controller('testController', ['$filter', '$http', '$location', '$routePa
                     alert(response.data.message);
                 } else {
                     if (response.data.data.length == 0) {
-                        alert("Sorry! No Test Is Assigned By Admin!!!");
-                        $location.path('/dashboard/' + main.userId);
+                        alert("Sorry! No Test Is Assigned By Admin!!!"); 
+                        $location.path('/dashboard/' + main.userId); //redirect to homepage if no test present
                     } else {
-                        main.testArray = response.data.data;
+                        main.testArray = response.data.data;//retrieve tests
                     }
                 }
             }, function errorCallBack(response) {

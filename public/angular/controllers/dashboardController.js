@@ -1,5 +1,5 @@
 examApp.controller('dashController', ['$filter', '$http', '$location', '$routeParams', 'queryService', 'authenticationService', function ($filter, $http, $location, $routeParams, queryService, authenticationService) {
-    var main = this;
+    var main = this; //normal user dashboard
     var user;
     this.getsecurityQuestion = function () {
         var data = { _id: $routeParams.userId }
@@ -31,7 +31,7 @@ examApp.controller('dashController', ['$filter', '$http', '$location', '$routePa
     this.logged();
     this.userId = $routeParams.userId;
     main.heading = "Welcome to Exam App";
-    this.getusertestDetails = function () {
+    this.getusertestDetails = function () { //user test details are displayed on dashboard
         var userid = $routeParams.userId;
         queryService.getusertestDetails(userid)
             .then(function successCallback(response) {
@@ -40,23 +40,23 @@ examApp.controller('dashController', ['$filter', '$http', '$location', '$routePa
                 } else {
                     var data = response.data.data;
                     main.testtakenInfo = data;
-                    main.testtakenInfoforGraph = [];
+                    main.testtakenInfoforGraph = []; //for chart
                     main.testtakenInfoLabels = [];
                     var len = data.length;
                     for (var i = 0; i < data.length; i++) {
-                        main.testtakenInfoforGraph.push(data[i].score);
-                        main.testtakenInfoLabels.push(data[i]._id);
+                        main.testtakenInfoforGraph.push(data[i].score); //push user score
+                        main.testtakenInfoLabels.push(data[i]._id); //push user info
                     }
-                    if (len == 0) {
+                    if (len === 0) { //if no test given
                         main.testtaken = "Give A Test first.";
                         main.avgMarks = "0";
                     } else {
                         var scoreCounter = 0;
                         for (var i = 0; i < len; i++) {
-                            scoreCounter = scoreCounter + data[i].score;
+                            scoreCounter = scoreCounter + data[i].score; //calculate user score
                         }
-                        main.avgMarks = (scoreCounter / len);
-                        main.testtaken = data.length;
+                        main.avgMarks = (scoreCounter / len); //calculate average
+                        main.testtaken = data.length; //no. of test taken
                     }
                 }
             }, function errorCallback(response) {

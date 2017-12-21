@@ -1,5 +1,5 @@
 examApp.controller('adminController', ['$filter', '$http', '$location', '$routeParams', 'queryService', 'authenticationService', function ($filter, $http, $location, $routeParams, queryService, authenticationService) {
-    var main = this;
+    var main = this; //admin dashboard controller
     var user;
     this.getsecurityQuestion = function () {
         var data = {
@@ -25,7 +25,7 @@ examApp.controller('adminController', ['$filter', '$http', '$location', '$routeP
 
     this.logged = function () {
         main.username = queryService.userName;
-        if (queryService.log == 1 || queryService.userId !== 'undefined') {
+        if (queryService.log === 1 || queryService.userId !== 'undefined') {
             return 1;
         } else {
             $location.path('/');
@@ -34,7 +34,7 @@ examApp.controller('adminController', ['$filter', '$http', '$location', '$routeP
     this.logged();
     this.userId = $routeParams.userId;
     main.heading = "Admin";
-    this.Create = function () {
+    this.Create = function () { //create a test
         var data = {
             testName: main.testName,
             testCategory: main.testCategory,
@@ -58,7 +58,7 @@ examApp.controller('adminController', ['$filter', '$http', '$location', '$routeP
             })
     }
     var testId;
-    this.getTests = function () {
+    this.getTests = function () { //fetch tests
         queryService.getTests()
             .then(function successCallback(response) {
                 if (response.data.error === true) {
@@ -71,7 +71,7 @@ examApp.controller('adminController', ['$filter', '$http', '$location', '$routeP
             })
     }
 
-    this.createaQuestion = function () {
+    this.createaQuestion = function () { //create a question
         var data = {
             question: main.question,
             optionA: main.optionA,
@@ -79,7 +79,7 @@ examApp.controller('adminController', ['$filter', '$http', '$location', '$routeP
             optionC: main.optionC,
             optionD: main.optionD,
             answer: main.answer,
-            id: main.idtest
+            id: main.idtest //test id
         }
         queryService.createaQuestion(data)
             .then(function successCallback(response) {
@@ -96,7 +96,7 @@ examApp.controller('adminController', ['$filter', '$http', '$location', '$routeP
             })
     }
 
-    this.deleteaTest = function (id) {
+    this.deleteaTest = function (id) { //test id is passed in function to delete it
         var data = id;
         queryService.deleteaTest(data)
             .then(function successCallback(response) {
@@ -111,7 +111,7 @@ examApp.controller('adminController', ['$filter', '$http', '$location', '$routeP
             })
     }
 
-    this.viewQuestions = function (id) {
+    this.viewQuestions = function (id) { //view the questions in a test
         var data = id;
         queryService.viewQuestions(data)
             .then(function successCallback(response) {
@@ -119,10 +119,10 @@ examApp.controller('adminController', ['$filter', '$http', '$location', '$routeP
                     alert(response.data.message);
                 } else {
                     main.questArray = response.data.data;
-                    if (main.questArray.length == 0) {
+                    if (main.questArray.length === 0) {
                         alert("No questions available.");
                     } else {
-                        $('#myModalViewQues').modal('show');
+                        $('#myModalViewQues').modal('show'); //if questions are present, this modal will be displayed
                         alert("All Questions recieved.");
                     }
                 }
@@ -131,7 +131,7 @@ examApp.controller('adminController', ['$filter', '$http', '$location', '$routeP
             })
     }
 
-    this.viewandUpdateQuestion = function (id) {
+    this.viewandUpdateQuestion = function (id) { //update a ques list view
         var data = id;
         queryService.viewQuestions(data)
             .then(function successCallback(response) {
@@ -139,7 +139,7 @@ examApp.controller('adminController', ['$filter', '$http', '$location', '$routeP
                     alert(response.data.message);
                 } else {
                     main.questArray = response.data.data;
-                    if (main.questArray.length == 0) {
+                    if (main.questArray.length === 0) {
                         alert("No questions available.");
                     } else {
                         $('#myModalQuestionList').modal('show');
@@ -151,7 +151,7 @@ examApp.controller('adminController', ['$filter', '$http', '$location', '$routeP
             })
     }
 
-    this.viewandUpdateDesiredQuestion = function (id) {
+    this.viewandUpdateDesiredQuestion = function (id) { //update a desired question
         main.useridtoUpdateTest = id;
         var data = id;
         queryService.viewQuestions(data)
@@ -172,13 +172,13 @@ examApp.controller('adminController', ['$filter', '$http', '$location', '$routeP
             })
     }
 
-    this.updateForm = function (index, questionid) {
+    this.updateForm = function (index, questionid) { //question update form
         main.updatequestionindex = index;
         main.idofquestiontoupdat = questionid;
         $('#myModalQuestionListtoupdateform').modal('show');
     }
 
-    this.deleteaQuestion = function (index, questid) {
+    this.deleteaQuestion = function (index, questid) { //delete a question by its index and id
         var data = { id: main.idtest }
         queryService.deleteaQuestion(data, index, questid)
             .then(function successCallback(response) {
@@ -194,7 +194,7 @@ examApp.controller('adminController', ['$filter', '$http', '$location', '$routeP
             })
     }
 
-    this.updateaQuestion = function () {
+    this.updateaQuestion = function () { //update a question with new info
         var data = {
             question: main.question,
             optionA: main.optionA,
@@ -220,7 +220,7 @@ examApp.controller('adminController', ['$filter', '$http', '$location', '$routeP
             })
     }
 
-    this.updateTests = function () {
+    this.updateTests = function () { //update a test
         var data = {
             testName: main.testName,
             testCategory: main.testCategory,
@@ -244,7 +244,7 @@ examApp.controller('adminController', ['$filter', '$http', '$location', '$routeP
             })
     }
 
-    this.getuserInfo = function () {
+    this.getuserInfo = function () { //get local user info
         queryService.userInfo()
             .then(function successCallback(response) {
                 if (response.data.error === true) {
@@ -288,7 +288,7 @@ examApp.controller('adminController', ['$filter', '$http', '$location', '$routeP
             })
     }
 
-    this.infoforPerformance = function () {
+    this.infoforPerformance = function () { //user ids for performance
         queryService.userInfo()
             .then(function successCallback(response) {
                 if (response.data.error === true) {
@@ -302,7 +302,7 @@ examApp.controller('adminController', ['$filter', '$http', '$location', '$routeP
             })
     }
 
-    this.getperformanceInfo = function (userId) {
+    this.getperformanceInfo = function (userId) { //when a user id is clicked by upper controller, this shows their performance
         var id = userId;
         queryService.getusertestDetails(id)
             .then(function successCallback(response) {

@@ -1,7 +1,7 @@
 examApp.controller('resetController', ['$http', '$location', '$routeParams', 'queryService', 'authenticationService', function ($http, $location, $routeParams, queryService, authenticationService) {
     var main = this;
     this.getsecurityQuestion = function () {
-        var data = { _id: $routeParams.userId }
+        var data = { _id: $routeParams.userId } //retrieve user id
         queryService.getsecurityQuest(data)
             .then(function successCallback(response) {
                 if (response.data.error === true) {
@@ -9,8 +9,8 @@ examApp.controller('resetController', ['$http', '$location', '$routeParams', 'qu
                 } else {
                     var userId;
                     var data = response.data.data;
-                    main.security = data.security;
-                    authenticationService.setToken(response.data.token);
+                    main.security = data.security; //security question
+                    authenticationService.setToken(response.data.token);//set token to local storage
                 }
             }, function errorCallback(response) {
                 alert("There was a problem in reset security");
@@ -20,9 +20,9 @@ examApp.controller('resetController', ['$http', '$location', '$routeParams', 'qu
     this.getsecurityQuestion();
     this.submit = function () {
         var data = {
-            answer: main.answer,
-            _id: $routeParams.userId,
-            password: main.password
+            answer: main.answer, //security answer
+            _id: $routeParams.userId,//pass user id
+            password: main.password//pass password
         }
         queryService.setnewPassword(data)
             .then(function successCallback(response) {
@@ -30,7 +30,7 @@ examApp.controller('resetController', ['$http', '$location', '$routeParams', 'qu
                     alert(response.data.message);
                 } else {
                     alert("Password changed.");
-                    $location.path('/');
+                    $location.path('/');//redirect
                 }
             }, function errorCallback(response) {
                 alert("There was a problem in changing password");
