@@ -309,7 +309,7 @@ examApp.controller('adminController', ['$filter', '$http', '$location', '$routeP
                 if (response.data.error === true) {
                     alert(response.data.message);
                 } else {
-                    main.userinfoforPerformance = response.data.data;
+                    main.userInfoforperformance = response.data.data;
                     $('#myModalgetUserinfoforperformanceshow').modal('show');
                 }
             }, function errorCallback(response) {
